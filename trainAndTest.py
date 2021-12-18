@@ -41,7 +41,7 @@ def train(trainArgs):
             if trainArgs['use_regularizer']:
                 attT = att.transpose(1,2)
                 identity = torch.eye(att.size(1))
-                identity = Variable(identity.unsqueeze(0).expand(train_loader.batch_size,att.size(1),att.size(1))).cuda()
+                identity = Variable(identity.unsqueeze(0).expand(train_loader.batch_size,att.size(1),att.size(1))).cpu()
                 penal = attention_model.l2_matrix_norm(att@attT - identity)
             if not bool(attention_model.type) :
                 #binary classification
@@ -60,9 +60,11 @@ def train(trainArgs):
                 torch.nn.utils.clip_grad_norm(attention_model.parameters(),0.5)
             optimizer.step()
             n_batches+=1
-            if batch_idx %1000==0: 
-                print(batch_idx)
-                
+            if batch_idx %100==0: 
+                print("Training finised on batch {}  | Loss = {}".format(batch_idx, loss.data))
+                if(trainArgs['doSave']):
+                    print("Saving model...")
+                    torch.save(attention_model.state_dict(), './model_pkl/DUDE/'+trainArgs['saveNamePre']+'%d_reim.pkl'%(i+1))        
         avg_loss = total_loss/n_batches
         acc = correct.numpy()/(len(train_loader.dataset))
         
@@ -72,8 +74,7 @@ def train(trainArgs):
         print("avg_loss is",avg_loss)
         print("train ACC = ",acc)
         
-        if(trainArgs['doSave']):
-            torch.save(attention_model.state_dict(), './model_pkl/DUDE/'+trainArgs['saveNamePre']+'%d.pkl'%(i+1))
+        
         if(trainArgs['doTest']):
             testArgs = {}
             testArgs['model'] = attention_model
@@ -132,7 +133,7 @@ def test(testArgs):
         for batch_idx,(lines, contactmap,properties) in enumerate(test_loader):
             input, seq_lengths, y = make_variables(lines, properties,smiles_letters)
             attention_model.hidden_state = attention_model.init_hidden()
-            contactmap = contactmap.cuda()
+            contactmap = contactmap.cpu()
             y_pred,att = attention_model(input,contactmap)
             if not bool(attention_model.type) :
                 #binary classification

@@ -70,29 +70,41 @@ modelArgs['n_chars_seq'] = 21
 modelArgs['dropout'] = 0.2
 modelArgs['in_channels'] = 8
 modelArgs['cnn_channels'] = 32
-modelArgs['cnn_layers'] = 4
+modelArgs['cnn_layers'] = 16
 modelArgs['emb_dim'] = 30
-modelArgs['dense_hid'] = 64
+modelArgs['dense_hid'] = 100
 modelArgs['task_type'] = 0
 modelArgs['n_classes'] = 1
 
 print('train args...')
 
 trainArgs = {}
-trainArgs['model'] = DrugVQA(modelArgs,block = ResidualBlock).cuda()
+trainArgs['model'] = DrugVQA(modelArgs,block = ResidualBlock).cpu()
 trainArgs['epochs'] = 30
-trainArgs['lr'] = 0.0007
+trainArgs['lr'] = 0.001
 trainArgs['train_loader'] = train_loader
 trainArgs['doTest'] = True
 trainArgs['test_proteins'] = testProteinList
 trainArgs['testDataDict'] = dataDict
 trainArgs['seqContactDict'] = seqContactDict
-trainArgs['use_regularizer'] = False
-trainArgs['penal_coeff'] = 0.03
+trainArgs['use_regularizer'] = True
+trainArgs['penal_coeff'] = 0.001
 trainArgs['clip'] = True
 trainArgs['criterion'] = torch.nn.BCELoss()
 trainArgs['optimizer'] = torch.optim.Adam(trainArgs['model'].parameters(),lr=trainArgs['lr'])
 trainArgs['doSave'] = True
-trainArgs['saveNamePre'] = 'DUDE30Res-fold3-'
+trainArgs['saveNamePre'] = 'DUDE30Res-fold3-reproduce'
 
+"""
+testArgs = {}
+testArgs['model'] = trainArgs['model']
+testArgs['test_proteins'] = trainArgs['test_proteins']
+testArgs['testDataDict'] = trainArgs['testDataDict']
+testArgs['seqContactDict'] = trainArgs['seqContactDict']
+testArgs['criterion'] = trainArgs['criterion']
+testArgs['use_regularizer'] = trainArgs['use_regularizer']
+testArgs['penal_coeff'] = trainArgs['penal_coeff']
+testArgs['clip'] = trainArgs['clip']
+model_path = "model_pkl/DUDE/DUDE30Res-fold3-40.pkl"
+"""
 print('train args over...')

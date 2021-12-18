@@ -84,8 +84,8 @@ class DrugVQA(torch.nn.Module):
         self.conv = conv3x3(1, self.in_channels)
         self.bn = nn.BatchNorm2d(self.in_channels)
         self.elu = nn.ELU(inplace=False)
-        self.layer1 = self.make_layer(block, args['cnn_channels'], args['cnn_layers'])
-        self.layer2 = self.make_layer(block, args['cnn_channels'], args['cnn_layers'])
+        self.layer1 = self.make_layer(block, 16, args['cnn_layers'])
+        self.layer2 = self.make_layer(block, 32, args['cnn_layers'])
 
         self.linear_final_step = torch.nn.Linear(self.lstm_hid_dim*2+args['d_a'],args['dense_hid'])
         self.linear_final = torch.nn.Linear(args['dense_hid'],args['n_classes'])
@@ -112,7 +112,7 @@ class DrugVQA(torch.nn.Module):
         return soft_max_nd.transpose(axis, len(input_size)-1)
 
     def init_hidden(self):
-        return (Variable(torch.zeros(4,self.batch_size,self.lstm_hid_dim).cuda()),Variable(torch.zeros(4,self.batch_size,self.lstm_hid_dim)).cuda())
+        return (Variable(torch.zeros(4,self.batch_size,self.lstm_hid_dim).cpu()),Variable(torch.zeros(4,self.batch_size,self.lstm_hid_dim)).cpu())
     
     def make_layer(self, block, out_channels, blocks, stride=1):
         downsample = None
@@ -126,6 +126,11 @@ class DrugVQA(torch.nn.Module):
         for i in range(1, blocks):
             layers.append(block(out_channels, out_channels))
         return nn.Sequential(*layers)
+
+    def l2_matrix_norm(self, matrix):
+        mat = matrix[0].type(torch.DoubleTensor)
+        return torch.sqrt(torch.trace(torch.matmul(mat, mat)))
+
         
     # x1 = smiles , x2 = contactMap
     def forward(self,x1,x2):
