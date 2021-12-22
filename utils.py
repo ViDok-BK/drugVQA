@@ -7,7 +7,7 @@ from torch.autograd import Variable
 def create_variable(tensor):
     # Do cuda() before wrapping with variable
     if torch.cuda.is_available():
-        return Variable(tensor.cpu())
+        return Variable(tensor.cuda())
     else:
         return Variable(tensor)
 def replace_halogen(string):

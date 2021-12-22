@@ -79,7 +79,7 @@ modelArgs['n_classes'] = 1
 print('train args...')
 
 trainArgs = {}
-trainArgs['model'] = DrugVQA(modelArgs,block = ResidualBlock).cpu()
+trainArgs['model'] = DrugVQA(modelArgs,block = ResidualBlock).cuda()
 trainArgs['epochs'] = 30
 trainArgs['lr'] = 0.001
 trainArgs['train_loader'] = train_loader

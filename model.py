@@ -112,7 +112,7 @@ class DrugVQA(torch.nn.Module):
         return soft_max_nd.transpose(axis, len(input_size)-1)
 
     def init_hidden(self):
-        return (Variable(torch.zeros(4,self.batch_size,self.lstm_hid_dim).cpu()),Variable(torch.zeros(4,self.batch_size,self.lstm_hid_dim)).cpu())
+        return (Variable(torch.zeros(4,self.batch_size,self.lstm_hid_dim).cuda()),Variable(torch.zeros(4,self.batch_size,self.lstm_hid_dim)).cuda())
     
     def make_layer(self, block, out_channels, blocks, stride=1):
         downsample = None
