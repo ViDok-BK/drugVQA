@@ -75,7 +75,7 @@ def train(trainArgs):
         print("train ACC = ",acc)
         
         if(trainArgs['doSave']):
-            torch.save(attention_model.state_dict(), './model_pkl/DUDE/'+trainArgs['saveNamePre']+'%d.pkl'%(i+1))
+            torch.save(attention_model.state_dict(), './model_pkl/'+trainArgs['saveNamePre']+'%d.pkl'%(i+1))
         
         if(trainArgs['doTest']):
             testArgs = {}

@@ -28,12 +28,12 @@ class ProDataset(Dataset):
     def get_property_id(self, property):
         return self.property_list.index(property)
     
-testFoldPath = './data/Fragalysis/dataPre/Fragalysis-test'
-trainFoldPath = './data/Fragalysis/dataPre/Fragalysis-train'
-contactPath = './data/Fragalysis/contactMap'
-contactDictPath = './data/Fragalysis/dataPre/Fragalysis-contactDict'
-smileLettersPath  = './data/Fragalysis/voc/combinedVoc-wholeFour.voc'
-seqLettersPath = './data/Fragalysis/voc/sequence.voc'
+testFoldPath = './data/PDBbind/dataPre/PDBbind-test'
+trainFoldPath = './data/PDBbind/dataPre/PDBbind-train'
+contactPath = './data/PDBbind/contactMap'
+contactDictPath = './data/PDBbind/dataPre/PDBbind-contactDict'
+smileLettersPath  = './data/PDBbind/voc/combinedVoc-wholeFour.voc'
+seqLettersPath = './data/PDBbind/voc/sequence.voc'
 print('get train datas....')
 trainDataSet = getTrainDataSet(trainFoldPath)
 print('get seq-contact dict....')
@@ -45,8 +45,8 @@ sequence_letters = getLetters(seqLettersPath)
 testProteinList = getTestProteinList(testFoldPath)# whole foldTest
 # testProteinList = ['kpcb_2i0eA_full']# a protein of fold1Test
 # testProteinList = ['tryb1_2zebA_full','mcr_2oaxE_full', 'cxcr4_3oduA_full']# protein of fold3Test
-DECOY_PATH = './data/Fragalysis/decoy_smile'
-ACTIVE_PATH = './data/Fragalysis/active_smile'
+DECOY_PATH = './data/PDBbind/decoy_smile'
+ACTIVE_PATH = './data/PDBbind/active_smile'
 print('get protein-seq dict....')
 dataDict = getDataDict(testProteinList,ACTIVE_PATH,DECOY_PATH,contactPath)
 
@@ -80,7 +80,7 @@ print('train args...')
 
 trainArgs = {}
 trainArgs['model'] = DrugVQA(modelArgs,block = ResidualBlock).cuda()
-trainArgs['epochs'] = 50
+trainArgs['epochs'] = 5
 trainArgs['lr'] = 0.001
 trainArgs['train_loader'] = train_loader
 trainArgs['doTest'] = True
