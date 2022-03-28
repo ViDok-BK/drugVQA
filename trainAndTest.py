@@ -123,6 +123,7 @@ def test(testArgs):
     test_loader = testArgs['test_loader']
     criterion = testArgs["criterion"]
     attention_model = testArgs['model']
+    C = testArgs['penal_coeff']
     losses = []
     accuracy = []
     print('test begin ...')
@@ -137,6 +138,11 @@ def test(testArgs):
             attention_model.hidden_state = attention_model.init_hidden()
             contactmap = contactmap.cuda()
             y_pred,att = attention_model(input,contactmap)
+            if trainArgs['use_regularizer']:
+                attT = att.transpose(1,2)
+                identity = torch.eye(att.size(1))
+                identity = Variable(identity.unsqueeze(0).expand(train_loader.batch_size,att.size(1),att.size(1))).cuda()
+                penal = attention_model.l2_matrix_norm(att@attT - identity)
             if not bool(attention_model.type) :
                 #binary classification
                 #Adding a very small value to prevent BCELoss from outputting NaN's
