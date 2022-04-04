@@ -151,7 +151,6 @@ def getDataDict(testProteinList,activePath,decoyPath,contactPath,contactDictPath
     for x in testProteinList:#'xiap_2jk7A_full'
         xData = []
         protein = x.split('_')[0]
-        print(protein)
         proteinActPath = activePath+"/"+protein+"_actives_final.ism"
         proteinDecPath = decoyPath+"/"+protein+"_decoys_final.ism"
         act = open(proteinActPath,'r').readlines()
@@ -164,6 +163,5 @@ def getDataDict(testProteinList,activePath,decoyPath,contactPath,contactDictPath
             xData.append([actives[i][0],seq,actives[i][1]])
         for i in range(len(decoys)):
             xData.append([decoys[i][0],seq,decoys[i][1]])
-        print(len(xData))
         dataDict[x] = xData
     return dataDict
