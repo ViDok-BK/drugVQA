@@ -1,7 +1,9 @@
 import re
+import os
 
 train_file = 'dataPre/PDBbind-train'
-test_file = 'dataPre/PDBbind-test'
+test_active = 'active_smile'
+test_decoy = 'decoy_smile'
 fname = 'voc/combinedVoc-wholeFour.voc'
 regex = '(\[[^\[\]]{1,10}\])'
 add_chars = set()
@@ -270,11 +272,19 @@ with open(train_file, "r") as f:
         ligand = line.split(" ")[0]
         smiles_list.append(ligand)
 
-with open(test_file, "r") as f:
-    lines = f.read().split()
-    for line in lines:
-        ligand = line.split(" ")[0]
-        smiles_list.append(ligand)
+for af in os.listdir(test_active):
+    with open(os.path.join(test_active, af), "r") as f:
+        lines = f.read().split()
+        for line in lines:
+            ligand = line.split(" ")[0]
+            smiles_list.append(ligand)
+
+for df in os.listdir(test_decoy):
+    with open(os.path.join(test_decoy, df), "r") as f:
+        lines = f.read().split()
+        for line in lines:
+            ligand = line.split(" ")[0]
+            smiles_list.append(ligand)
 
 def replace_halogen(string):
     """Regex to replace Br and Cl with single letters"""
