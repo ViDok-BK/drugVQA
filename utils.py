@@ -130,10 +130,11 @@ def getSeqContactDict(contactPath,contactDictPath):# make a seq-contactMap dict
     for data in contactDict:
         _,contactMapName = data.strip().split(':')
         seq,contactMap = getProtein(contactPath,contactMapName)
-        contactmap_np = [list(map(float, x.strip(' ').split(' '))) for x in contactMap]
-        feature2D = np.expand_dims(contactmap_np, axis=0)
-        feature2D = torch.FloatTensor(feature2D)    
-        seqContactDict[seq] = feature2D
+        # contactmap_np = [list(map(float, x.strip(' ').split(' '))) for x in contactMap]
+        # feature2D = np.expand_dims(contactmap_np, axis=0)
+        # feature2D = torch.FloatTensor(feature2D)    
+        # seqContactDict[seq] = feature2D
+        seqContactDict[seq] = contactPath +"/"+ contactMapName
     return seqContactDict
 def getLetters(path):
     with open(path, 'r') as f:
