@@ -140,7 +140,13 @@ def getLetters(path):
     with open(path, 'r') as f:
         chars = f.read().split()
     return chars
-def getDataDict(testProteinList,activePath,decoyPath,contactPath):
+def getDataDict(testProteinList,activePath,decoyPath,contactPath,contactDictPath):
+    contactDict = open(contactDictPath).readlines()
+    proteinSeqDict = {}
+    for data in contactDict:
+        seq,contactMapName = data.strip().split(':')
+        proteinSeqDict[contactMapName] = seq
+    
     dataDict = {}
     for x in testProteinList:#'xiap_2jk7A_full'
         xData = []
@@ -152,7 +158,8 @@ def getDataDict(testProteinList,activePath,decoyPath,contactPath):
         dec = open(proteinDecPath,'r').readlines()
         actives = [[x.split(' ')[0],1] for x in act] ######
         decoys = [[x.split(' ')[0],0] for x in dec]# test
-        seq = getProtein(contactPath,x,contactMap = False)
+        # seq = getProtein(contactPath,x,contactMap = False)
+        seq = proteinSeqDict[protein]
         for i in range(len(actives)):
             xData.append([actives[i][0],seq,actives[i][1]])
         for i in range(len(decoys)):

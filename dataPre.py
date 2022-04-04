@@ -52,7 +52,7 @@ testProteinList = getTestProteinList(testFoldPath)# whole foldTest
 DECOY_PATH = './data/Fragalysis/decoy_smile'
 ACTIVE_PATH = './data/Fragalysis/active_smile'
 print('get protein-seq dict....')
-dataDict = getDataDict(testProteinList,ACTIVE_PATH,DECOY_PATH,contactPath)
+dataDict = getDataDict(testProteinList,ACTIVE_PATH,DECOY_PATH,contactPath, contactDictPath)
 
 N_CHARS_SMI = len(smiles_letters)
 N_CHARS_SEQ = len(sequence_letters)
