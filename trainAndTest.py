@@ -1,6 +1,8 @@
 from utils import *
 from dataPre import *
 from sklearn import metrics
+from tqdm import tqdm
+
 def train(trainArgs):
     """
     args:
@@ -32,7 +34,7 @@ def train(trainArgs):
         optimizer = trainArgs['optimizer']
         criterion = trainArgs["criterion"]
         attention_model = trainArgs['model']
-        for batch_idx,(lines, contactmap,properties) in enumerate(train_loader):  
+        for batch_idx,(lines, contactmap,properties) in enumerate(tqdm(train_loader)):  
             input, seq_lengths, y = make_variables(lines, properties,smiles_letters)
             attention_model.hidden_state = attention_model.init_hidden()
             contactmap = create_variable(contactmap)
@@ -133,7 +135,7 @@ def test(testArgs):
     all_pred = np.array([])
     all_target = np.array([])
     with torch.no_grad():
-        for batch_idx,(lines, contactmap,properties) in enumerate(test_loader):
+        for batch_idx,(lines, contactmap,properties) in enumerate(tqdm(test_loader)):
             input, seq_lengths, y = make_variables(lines, properties,smiles_letters)
             attention_model.hidden_state = attention_model.init_hidden()
             contactmap = contactmap.cuda()

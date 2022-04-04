@@ -3,6 +3,7 @@ from utils import *
 from torch.utils.data import Dataset, DataLoader
 import torch
 import pickle
+import numpy as np
 
 class ProDataset(Dataset):
     # Initialize your data, download, etc.
@@ -16,7 +17,8 @@ class ProDataset(Dataset):
     def __getitem__(self, index):
         smiles,seq,label = self.dataSet[index]
         contactMapFile = self.dict[seq]
-        contactMap = pickle.load(open(contactMapFile, "rb"))
+        contactmap_np = pickle.load(open(contactMapFile, "rb"))
+        contactMap = np.expand_dims(contactmap_np, axis=0)
         contactMap = torch.FloatTensor(contactMap)
         return smiles, contactMap, int(label)
 
