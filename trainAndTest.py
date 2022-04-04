@@ -112,14 +112,22 @@ def getROCE(predList,targetList,roceRate):
     return roce
 def testPerProtein(testArgs):
     result = {}
-    for x in testArgs['test_proteins']:
-        print('\n current test protein:',x.split('_')[0])
-        data = testArgs['testDataDict'][x]
-        test_dataset = ProDataset(dataSet = data,seqContactDict = testArgs['seqContactDict'])
-        test_loader = DataLoader(dataset=test_dataset,batch_size=1, shuffle=True,drop_last = True)
-        testArgs['test_loader'] = test_loader
-        testAcc,testRecall,testPrecision,testAuc,testLoss,all_pred,all_target,roce1,roce2,roce3,roce4 = test(testArgs)
-        result[x] = [testAcc,testRecall,testPrecision,testAuc,testLoss,all_pred,all_target,roce1,roce2,roce3,roce4]
+    # for x in testArgs['test_proteins']:
+    #     print('\n current test protein:',x.split('_')[0])
+    #     data = testArgs['testDataDict'][x]
+    #     test_dataset = ProDataset(dataSet = data,seqContactDict = testArgs['seqContactDict'])
+    #     test_loader = DataLoader(dataset=test_dataset,batch_size=1, shuffle=True,drop_last = True)
+    #     testArgs['test_loader'] = test_loader
+    #     testAcc,testRecall,testPrecision,testAuc,testLoss,all_pred,all_target,roce1,roce2,roce3,roce4 = test(testArgs)
+    #     result[x] = [testAcc,testRecall,testPrecision,testAuc,testLoss,all_pred,all_target,roce1,roce2,roce3,roce4]
+    from functools import reduce
+    data = reduce(lambda x, y: x + y, testArgs['testDataDict'].values(), [])
+    test_dataset = ProDataset(dataSet = data,seqContactDict = testArgs['seqContactDict'])
+    test_loader = DataLoader(dataset=test_dataset,batch_size=1, shuffle=True,drop_last = True)
+    testArgs['test_loader'] = test_loader
+    testAcc,testRecall,testPrecision,testAuc,testLoss,all_pred,all_target,roce1,roce2,roce3,roce4 = test(testArgs)
+    result["all"] = [testAcc,testRecall,testPrecision,testAuc,testLoss,all_pred,all_target,roce1,roce2,roce3,roce4]
+
     return result
 def test(testArgs):
     test_loader = testArgs['test_loader']

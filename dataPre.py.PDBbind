@@ -99,7 +99,7 @@ trainArgs['clip'] = True
 trainArgs['criterion'] = torch.nn.BCELoss()
 trainArgs['optimizer'] = torch.optim.Adam(trainArgs['model'].parameters(),lr=trainArgs['lr'])
 trainArgs['doSave'] = True
-trainArgs['saveNamePre'] = 'Fragalysis'
+trainArgs['saveNamePre'] = 'PDBbind'
 
 """
 testArgs = {}
