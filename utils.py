@@ -80,7 +80,7 @@ def construct_vocabulary(smiles_list,fname):
     add_chars = set()
     for i, smiles in enumerate(smiles_list):
         regex = '(\[[^\[\]]{1,10}\])'
-        smiles = ds.replace_halogen(smiles)
+        smiles = replace_halogen(smiles)
         char_list = re.split(regex, smiles)
         for char in char_list:
             if char.startswith('['):
